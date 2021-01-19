@@ -6,16 +6,12 @@
 <section class="news">
         <div class="container2">
         <?php 
-            $sql = $pdo->prepare('SELECT * FROM news');
-            $sql->execute();
-            $info = $sql->fetchAll();
+
+            $info = $sen->get();
 
             if(isset($_POST['enviar'])){
                 $search = $_POST['searc'];
-                
-                $pesq = $pdo->prepare("SELECT * FROM news WHERE title LIKE '%$search%'");
-                $pesq->execute();
-                $result = $pesq->fetchAll();
+                $result = $sen->search($search);
             }
 
             if(empty($info[0])){
@@ -23,7 +19,7 @@
                 <div class="aviso">
                     <h1 class="warnign">SEM NOTÍCIAS</h1>
                     <h1>Clique no botão abaixo para criar uma!</h1>
-                    <button class="btn btn-primary" type="button"><a href="perguntar.php">CRIAR</button>
+                    <a href="perguntar.php"><button class="btn btn-primary" type="button">CRIAR</button></a>
                 </div>
             <?php
             }else{
@@ -49,8 +45,7 @@
                 }
                 if(isset($_POST['del'])){
                     $id = $_POST['del'];
-                    $del = $pdo->prepare("DELETE FROM news WHERE news.id=?");
-                    $del->execute(array($id));
+                    $sen->delete($id);
                 }
             }else{
                 foreach ($info as $key => $value) {
@@ -73,8 +68,7 @@
                             }
                             if(isset($_POST['del'])){
                                 $id = $_POST['del'];
-                                $del = $pdo->prepare("DELETE FROM news WHERE news.id=?");
-                                $del->execute(array($id));
+                                $sen->delete($id);
                             }
             }
             }
